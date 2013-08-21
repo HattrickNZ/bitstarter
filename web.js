@@ -33,6 +33,29 @@ app.get('/orders', function(request, response) {
   });
 });
 
+//Render example.com/demo -- wanna render a demo page
+// this is basically a route for this demo what i want is a route 
+//to a *.ejs file in my views folder
+
+app.get('/demo2', function(req, res){
+  // do stuff
+  res.send('Hello World! this is my demo page');
+});
+
+//trying to render views/demo.ejs here!!!!
+app.get('/demo', function(req, res){
+  // do stuff
+  //res.send('Hello World! this is my demo page');
+   res.render("demo");
+});
+
+//trying to render views/demo3.ejs here!!!!
+app.get('/demo3', function(req, res){
+  // do stuff
+  //res.send('Hello World! this is my demo page');
+   res.render("demo3");
+});
+
 // Hit this URL while on example.com/orders to refresh
 app.get('/refresh_orders', function(request, response) {
   https.get("https://coinbase.com/api/v1/orders?api_key=" + process.env.COINBASE_API_KEY, function(res) {
