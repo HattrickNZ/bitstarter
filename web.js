@@ -12,11 +12,31 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 8080);
 
+//this was the original but I have changed it in the next function -- point 2 a different way
 // Render homepage (note trailing slash): example.com/
-app.get('/', function(request, response) {
+/*app.get('/', function(request, response) {
   var data = fs.readFileSync('index.html').toString();
   response.send(data);
+});*/
+
+//adding point 2 here a different way then the one below
+// Render homepage (note trailing slash): example.com/
+app.get('/', function(request, response) {
+  global.db.Order.findAll().success(function(orders) {
+    var orders_json = [];
+    orders.forEach(function(order) {
+      orders_json.push({id: order.coinbase_id, amount: order.amount, time: order.time});
+    });
+    // Uses views/orders.ejs
+    response.render("index", {orders: orders_json});
+  }).error(function(err) {
+    console.log(err);
+    response.send("error retrieving orders");
+  });
 });
+// END of adding point 2 here a different way then the one below
+
+
 
 // Render example.com/orders
 app.get('/orders', function(request, response) {
@@ -33,6 +53,22 @@ app.get('/orders', function(request, response) {
   });
 });
 
+//adding point 2 here --this is similar to the above except ithas the index in the response.render \n it also gets the same data from the DB whereas I just want the sum & the number of backers
+/*
+global.db.Order.findAll().success(function(orders) {
+    var orders_json = [];
+    orders.forEach(function(order) {
+      orders_json.push({id: order.coinbase_id, amount: order.amount, time: order.time});
+    });
+    // Uses views/orders.ejs
+    response.render("index", {orders: orders_json});
+  }).error(function(err) {
+    console.log(err);
+    response.send("error retrieving orders");
+  });
+
+*/
+//KS-------------------------------------KS
 //Render example.com/demo -- wanna render a demo page
 // this is basically a route for this demo what i want is a route 
 //to a *.ejs file in my views folder
@@ -42,6 +78,21 @@ app.get('/demo2', function(req, res){
   res.send('Hello World! this is my demo page');
 });
 
+//trying to render views/demo3.ejs here!!!!
+app.get('/demo3', function(req, res){
+  // do stuff
+  //res.send('Hello World! this is my demo page');
+   res.render("demo3");
+});
+//KS KS-----------------------------------------------KS
+
+//render views/contact.ejs here!!!!
+app.get('/contact', function(req, res){
+  // do stuff
+  //res.send('Hello World! this is my demo page');
+   res.render("contact");
+});
+
 //trying to render views/demo.ejs here!!!!
 app.get('/demo', function(req, res){
   // do stuff
@@ -49,12 +100,7 @@ app.get('/demo', function(req, res){
    res.render("demo");
 });
 
-//trying to render views/demo3.ejs here!!!!
-app.get('/demo3', function(req, res){
-  // do stuff
-  //res.send('Hello World! this is my demo page');
-   res.render("demo3");
-});
+
 
 // Hit this URL while on example.com/orders to refresh
 app.get('/refresh_orders', function(request, response) {

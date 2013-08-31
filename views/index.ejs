@@ -1,7 +1,7 @@
 <!Doctype html>
 <html lang="en">
     <meta charset="utf-8">
-    <title>HouseMapper_test99</title>
+    <title>HouseMapper_index.ejs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://d396qusza40orc.cloudfront.net/startup%2Fcode%2Fbootstrap-combined.no-icons.min.css">
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
@@ -142,16 +142,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">HouseMapper</a>
+          <a class="brand" href="/">HouseMapper</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="/contact">Contact</a></li>
 		<li><a href="/orders">Orders</a></li>
                 <li><a href="/demo">Demo</a></li>
- 		<li><a href="/demo2">Demo2</a></li>
-                <li><a href="/demo3">Demo3</a></li>
 
 
             </ul>
@@ -193,17 +190,24 @@
                 different in horizontal and vertical layouts, illustrating
                 media queries. -->
                 <div class="linediv-l">
-                <h3>1</h3> <p>backers</p>
+		  <!--add my code here from no 3-->
+		  <% var backers = 0; var bc_sum = 0; %>
+		  <% for(var i=0; i<orders.length; i++) {%>
+		  <% backers = backers + 1 %>
+		  <% bc_sum = bc_sum + orders[i].amount %>
+		  <% } %>
+		  <!--add my code here from no 3 -->
+                <h3><%= backers %></h3> <p>backers</p>
                 </div>
               </div>
               <div class="span4">
                 <div class="linediv-c">
-                  <h3>$1</h3> <p>of $10,000</p>
+                  <h3><%= bc_sum %></h3> <p>of $10,000</p>
                 </div>
               </div>
               <div class="span4">
                 <div class="linediv-r">
-                <h3>30</h3> <p>days left</p>
+                <h3 id="countdown">22</h3> <p>days left</p>
                 </div>
               </div>
             </div>
@@ -212,8 +216,8 @@
             <!-- Bootstrap progress bar -->
             <!-- http://twitter.github.io/bootstrap/components.html#progress -->
             <div class="thermometer progress active">
-              <div class="bar bar-success" style="width: 6%;"></div>
-              <div class="bar bar-warning" style="width: 94%;"></div>
+              <div class="bar bar-success" style="width: <%= (bc_sum / 250) * 100 %>%;"></div>
+              <div class="bar bar-warning" style="width: <%= 100 - (bc_sum / 250) * 100 %>%;"></div>
             </div>
           </div>
           <div class="span6 offset3 order">
@@ -330,6 +334,23 @@
       </div>
     </div>
 
+
+<!-- This is this point 6 working out how many days are left -->
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+      today = new Date();
+
+      BigDay = new Date("September 09, 2013");
+      msPerDay = 24 * 60 * 60 * 1000 ;
+      timeLeft = (BigDay.getTime() - today.getTime());
+      e_daysLeft = timeLeft / msPerDay;
+      daysLeft = Math.floor(e_daysLeft);
+
+      $("#countdown").text(daysLeft);
+  });
+</script>
+
+
 		
 	<!-- google analytics here hw6 part3--> 
 	<script>
@@ -343,7 +364,5 @@
 
 	</script>
 	
-
-
   </body>
 </html>
